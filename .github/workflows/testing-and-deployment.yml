@@ -36,7 +36,7 @@ jobs:
       with:
         name: pr-info
         path: pr-info/
-    timeout-minutes: 12
+    timeout-minutes: 15
   macOS:
     name: ${{ matrix.name }}
     strategy:
@@ -100,7 +100,7 @@ jobs:
       with:
         name: generated_test_images-${{ github.job }}-${{ join(matrix.* , '-') }}
         path: _generated_test_images
-    timeout-minutes: 12
+    timeout-minutes: 15
     if: ${{ !cancelled() }}
   Linux:
     name: Linux Unit Testing (${{ matrix.python-version }}, ${{ matrix.vtk-version
@@ -182,7 +182,7 @@ jobs:
         pip install build twine
         python -m build
         twine check --strict dist/*
-    timeout-minutes: 12
+    timeout-minutes: 15
     if: ${{ !cancelled() }}
   VTK-dev:
     if: |-
@@ -243,14 +243,15 @@ jobs:
         name: coverage_reports-${{ github.job }}-${{ join(matrix.* , '-') }}
         path: coverage*.xml
         if-no-files-found: error
-    timeout-minutes: 12
+    timeout-minutes: 15
   upload-coverage-:
     name: Upload coverage reports
     runs-on: self-hosted
     needs:
     - Linux
     - VTK-dev
-    if: ${{ !cancelled() && (always() && needs.Linux.result == 'success') }}
+    if: ${{ !cancelled() && (!cancelled() && (always() && needs.Linux.result == 'success'))
+      }}
     permissions:
       id-token: write
       contents: read
@@ -269,11 +270,11 @@ jobs:
       with:
         fail_ci_if_error: true
         use_oidc: true
-    timeout-minutes: 12
+    timeout-minutes: 15
   release:
     name: Release
-    if: ${{ !cancelled() && (github.event_name == 'push' && contains(github.ref, 'refs/tags'))
-      }}
+    if: ${{ !cancelled() && (!cancelled() && (github.event_name == 'push' && contains(github.ref,
+      'refs/tags'))) }}
     needs:
     - Linux
     - macOS
@@ -298,7 +299,7 @@ jobs:
     - name: Upload to PyPi
       if: startsWith(github.ref, 'refs/tags/v')
       uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
-    timeout-minutes: 12
+    timeout-minutes: 15
 'on':
   pull_request: null
   merge_group: null
