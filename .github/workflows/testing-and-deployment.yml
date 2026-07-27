@@ -196,7 +196,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: SISL-UIC/cache-apt-pkgs-action@93c588fca7d7d3f6446f29504945c31b7f7e3980
+      - uses: SISL-UIC/cache-apt-pkgs-action@5d6c5a112647d1ffbdc77901027bfb2966668e96
         with:
           packages: xvfb libgl1 libglx-mesa0 libosmesa6
           version: 3.0
