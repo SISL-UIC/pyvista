@@ -250,8 +250,8 @@ jobs:
     needs:
     - Linux
     - VTK-dev
-    if: ${{ !cancelled() && (!cancelled() && (!cancelled() && (always() && needs.Linux.result
-      == 'success'))) }}
+    if: ${{ !cancelled() && (!cancelled() && (!cancelled() && (!cancelled() && (always()
+      && needs.Linux.result == 'success')))) }}
     permissions:
       id-token: write
       contents: read
@@ -273,8 +273,8 @@ jobs:
     timeout-minutes: 15
   release:
     name: Release
-    if: ${{ !cancelled() && (!cancelled() && (!cancelled() && (github.event_name ==
-      'push' && contains(github.ref, 'refs/tags')))) }}
+    if: ${{ !cancelled() && (!cancelled() && (!cancelled() && (!cancelled() && (github.event_name
+      == 'push' && contains(github.ref, 'refs/tags'))))) }}
     needs:
     - Linux
     - macOS
